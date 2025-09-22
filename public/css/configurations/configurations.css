@@ -1,0 +1,12 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-image: url('../../images/bg_1.jpg');
+    background-repeat: no-repeat;
+}
+
+disabled-link {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
