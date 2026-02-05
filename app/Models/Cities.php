@@ -20,4 +20,9 @@ class Cities extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function suppliers()
+    {
+        return $this->hasMany(Suppliers::class);
+    }
 }

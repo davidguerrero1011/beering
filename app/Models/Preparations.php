@@ -11,8 +11,13 @@ class Preparations extends Model
     protected $fillable = [ 'product_id', 'preparation', 'description', 'quantity', 'status' ];
     public $timestamps = true;
 
-    public function product()
+    public function products()
     {
-        return $this->belongsTo(Products::class);
+        return $this->hasManyThrough(Products::class, ProductsByPreparation::class, 'preparation_id', 'id', 'id', 'product_id');
+    }
+
+    public function productsByPreparation()
+    {
+        return $this->hasMany(ProductsByPreparation::class, 'preparation_id', 'id');
     }
 }

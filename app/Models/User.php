@@ -23,6 +23,8 @@ class User extends Authenticatable
         'password',
         'city_id',
         'role_id',
+        'google_id',
+        'avatar',
         'status',
     ];
 
@@ -59,6 +61,16 @@ class User extends Authenticatable
     public function cashInflows()
     {
         return $this->hasMany(CashInflows::class);
+    }
+
+    public function suppliers() 
+    {
+        return $this->hasMany(Suppliers::class);
+    }
+
+    public function accountsByPayment()
+    {
+        return $this->hasMany(AccountsByPayment::class);
     }
 
 }

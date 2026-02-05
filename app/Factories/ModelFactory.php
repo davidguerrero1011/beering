@@ -12,12 +12,13 @@ use App\Models\ClubTables;
 use App\Models\Countries;
 use App\Models\Inventaries;
 use App\Models\Music;
+use App\Models\PaymentTypes;
 use App\Models\Preparations;
 use App\Models\Products;
 use App\Models\Promotions;
 use App\Models\Roles;
+use App\Models\Suppliers;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
 
 Class ModelFactory {
 
@@ -29,7 +30,6 @@ Class ModelFactory {
      */
     public static function getModelInstanceByType(int $type) : ?object
     {
-        Log::info("type: ". $type);
         return match ($type) {
             1 => new Countries(),
             2 => new Cities(),
@@ -45,6 +45,8 @@ Class ModelFactory {
             12 => new Music(),
             13 => new Products(),
             14 => new Categories(),
+            15 => new PaymentTypes(),
+            16 => new Suppliers(),
             default => null,
         };
     }

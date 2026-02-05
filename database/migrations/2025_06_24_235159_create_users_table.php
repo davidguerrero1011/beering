@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email')->unique()->comment('User email');
             $table->string('address')->nullable()->comment('User address');
             $table->string('neightboarhood')->nullable()->comment('User neightboarhood');
-            $table->string('password')->comment('User Password');
+            $table->string('password')->nullable()->comment('User Password');
             $table->rememberToken()->nullable()->comment('Token para la sesión remember me');
 
             $table->foreignId('city_id')->constrained()->onDelete('cascade')->comment('Users Foreign to Cities');

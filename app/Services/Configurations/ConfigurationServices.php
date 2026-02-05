@@ -2,7 +2,6 @@
 
 namespace App\Services\Configurations;
 
-use App\Http\Requests\GeneralStoreRequest;
 use App\Models\CashBoxes;
 use App\Models\CashInflows;
 use App\Models\CashOutflows;
@@ -12,6 +11,7 @@ use App\Models\ClubTables;
 use App\Models\Countries;
 use App\Models\Inventaries;
 use App\Models\Music;
+use App\Models\PaymentTypes;
 use App\Models\Preparations;
 use App\Models\Products;
 use App\Models\Promotions;
@@ -20,7 +20,6 @@ use App\Models\Suppliers;
 use App\Models\User;
 use App\Repositories\Interfaces\Configurations\ConfigurationInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 Class ConfigurationServices {
 
@@ -43,7 +42,8 @@ Class ConfigurationServices {
             case 1:
                 $model = new Countries();
                 $validated = $request->validate([
-                    'name'   => ['required', 'string', 'max:255']
+                    'name'   => ['required', 'string', 'max:255'],
+                    'status' => ['nullable', 'boolean']
                 ], [
                     'name.required' => 'El nombre del pais es obligatorio',
                     'name.string' => 'El nombre del pais debe tener solo letras',
@@ -69,7 +69,8 @@ Class ConfigurationServices {
             case 3:
                 $model = new Roles();
                 $validated = $request->validate([
-                    'name'   => ['required', 'string', 'max:255']
+                    'name'   => ['required', 'string', 'max:255'],
+                    'status' => ['nullable', 'boolean']
                 ], [
                     'name.required' => 'El nombre del pais es obligatorio',
                     'name.string' => 'El nombre del pais debe tener solo letras',
@@ -90,6 +91,7 @@ Class ConfigurationServices {
                         'email' => ['required', 'email', 'unique:users,email'],
                         'cellphone' => ['required', 'max:10'],
                         'phone' => ['required', 'max:7'],
+                        'status' => ['nullable', 'boolean']
                     ], [
                         'user_id.required' => 'El usuario es obligatorio',
                         'supplier_name.required' => 'El nombre del proveedor es obligatorio',
@@ -122,7 +124,8 @@ Class ConfigurationServices {
                         'neightboarhood' => ['required', 'string'],
                         'password' => ['required', 'min:5', 'max:15'],
                         'city_id' => ['required'],
-                        'role_id' => ['required']
+                        'role_id' => ['required'],
+                        'status' => ['nullable', 'boolean']
                     ], [
                         'name.required' => 'El nombre del pais es obligatorio',
                         'name.string' => 'El nombre del pais debe tener solo letras',
@@ -153,21 +156,23 @@ Class ConfigurationServices {
             case 5:
                 $model = new ClubTables();
                 $validated = $request->validate([
-                    'table' => ['required', 'max:255'],
-                    'number' => ['required']
+                    'table'  => ['required', 'max:255'],
+                    'number' => ['required'],
+                    'status' => ['nullable', 'boolean']
                 ], [
-                    'table.required' => 'El nombre de la mesa es obligatorio',
-                    'table.max' => 'El nombre de la mesa debe tener máximo 255 caracteres',
+                    'table.required'  => 'El nombre de la mesa es obligatorio',
+                    'table.max'       => 'El nombre de la mesa debe tener máximo 255 caracteres',
                     'number.required' => 'El número de la mesa es obligatorio',
                 ]);
                 break;
             case 6:
                 $model = new Inventaries();
                 $validated = $request->validate([
-                    'product_id' => ['required'],
+                    'product_id'  => ['required'],
                     'supplier_id' => ['required'],
-                    'amont' => ['required', 'integer', 'min:0'],
-                    'prize' => ['required', 'integer', 'min:0']
+                    'amont'       => ['required', 'integer', 'min:0'],
+                    'prize'       => ['required', 'integer', 'min:0'],
+                    'status'      => ['nullable', 'boolean']
                 ], [
                     'product_id.required' => 'El producto del inventario es obligatorio',
                     'supplier_id.required' => 'El proveedor del inventario es obligatorio',
@@ -182,13 +187,13 @@ Class ConfigurationServices {
             case 7:
                 $model = new CashBoxes();
                 $validated = $request->validate([
-                    'net_income' => ['required', 'integer', 'min:0'],
+                    'net_income' => ['required', 'numeric', 'min:0'],
                     'description' => ['required', 'max:1000'],
                     'user_id' => ['required'],
                     'date_entry' => ['required', 'date']
                 ], [
                     'net_income.required' => 'El valor de la caja es obligatorio',
-                    'net_income.integer' => 'El valor de la caja debe ser numerico',
+                    'net_income.numeric' => 'El valor de la caja debe ser numerico',
                     'net_income.min' => 'El valor de la caja no puede ser negativo',
                     'description.required' => 'La descripción es obligatoria',
                     'description.max' => 'La descripción debe tener maximo 1000 caracteres',
@@ -196,6 +201,7 @@ Class ConfigurationServices {
                     'date_entry.required' => 'La fecha del movimiento debe ser obligatorio',
                     'date_entry.date' => 'La fecha del movimiento debe tener formato fecha',
                 ]);
+                break;
 
             case 8:
                 $model = new CashInflows();
@@ -221,7 +227,7 @@ Class ConfigurationServices {
                     'amount' => ['required', 'integer', 'min:0'],
                     'description' => ['required', 'max:1000'],
                     'user_id' => ['required'],
-                    'date_entry' => ['required', 'date']
+                    'transaction_Date' => ['required', 'date']
                 ], [
                     'amount.required' => 'El valor del ingreso es obligatorio',
                     'amount.integer' => 'El ingreso debe ser numerico',
@@ -229,8 +235,8 @@ Class ConfigurationServices {
                     'description.required' => 'La descripción es obligatoria',
                     'description.max' => 'La descripción debe tener maximo 1000 caracteres',
                     'user_id.required' => 'El usuario de los pagos es obligatorio',
-                    'date_entry.required' => 'La fecha del movimiento debe ser obligatorio',
-                    'date_entry.date' => 'La fecha del movimiento debe tener formato fecha',
+                    'transaction_Date.required' => 'La fecha del movimiento debe ser obligatorio',
+                    'transaction_Date.date' => 'La fecha del movimiento debe tener formato fecha',
                 ]);
                 break;
             case 10:
@@ -240,7 +246,8 @@ Class ConfigurationServices {
                     'description' => ['required', 'max:1000'],
                     'prize' => ['required', 'integer', 'min:0'],
                     'start_date' => ['required', 'date'],
-                    'end_date' => ['required', 'date']
+                    'end_date' => ['required', 'date'],
+                    'status' => ['nullable', 'boolean']
                 ], [
                     'promotion.required' => 'El nombre de la promoción es obligatoria',
                     'promotion.max' => 'El nombre de la promoción debe contener maximo 255 caracteres',
@@ -258,12 +265,13 @@ Class ConfigurationServices {
             case 11:
                 $model = new Preparations();
                 $validated = $request->validate([
-                    'product_id' => ['required'],
+                    'products'  => ['required'],
                     'preparation' => ['required', 'max:255'],
                     'description' => ['required', 'max:1000'],
-                    'quantity' => ['required', 'integer', 'min:0']
+                    'quantity'    => ['required', 'integer', 'min:0'],
+                    'status'      => ['nullable', 'boolean']
                 ], [
-                    'product_id.required' => 'El producto de la preparación es obligatoria',
+                    'products.required' => 'El producto de la preparación es obligatoria',
                     'preparation.required' => 'El titulo de la preparación es obligatoria',
                     'preparation.max' => 'El titulo de la preparación debe tener maximo 255 caracteres',
                     'description.required' => 'La descripción es obligatoria',
@@ -278,14 +286,16 @@ Class ConfigurationServices {
                 $validated = $request->validate([
                     'song' => ['required', 'max:255'],
                     'artist' => ['required', 'max:255'],
-                    'club_table_id' => ['required'],
-                    'order' => ['required']
+                    'club_table_id' => ['required', 'integer', 'exists:club_tables,id'],
+                    'order' => ['required'],
+                    'status' => ['nullable', 'boolean']
                 ], [
                     'song.required' => 'La canción es obligatoria',
                     'song.max' => 'La canción debe tener maximo 255 caracteres',
                     'artist.required' => 'El artista de la canción es obligatoria',
-                    'club_table_id.required' => 'La mesa que pide la canción es obligatoria',
-                    'order.required' => 'La cantidad de la preparación es obligatoria'
+                    'club_table_id.required' => 'La mesa es obligatoria, debe asignar la mesa',
+                    'club_table_id.integer' => 'Debe seleccionar alguna de las mesas.',
+                    'order.required' => 'El órden de la canción es obligatoria'
                 ]);
                 break;
             case 13:
@@ -294,7 +304,8 @@ Class ConfigurationServices {
                     'product'     => ['required', 'max:255'],
                     'category_id' => ['required'],
                     'units'       => ['required', 'string'],
-                    'prize_unit'  => ['required', 'numeric']
+                    'prize_unit'  => ['required', 'numeric'],
+                    'status'      => ['nullable', 'boolean']
                 ], [
                     'product.required'     => 'El producto es obligatorio',
                     'product.max'          => 'El producto debe tener maximo 255 caracteres',
@@ -310,16 +321,63 @@ Class ConfigurationServices {
                 $model = new Categories();
                 $validated = $request->validate([
                     'name'     => ['required', 'max:255'],
+                    'status'   => ['nullable', 'boolean']
                 ], [
                     'name.required'  => 'El nombre de la categoria es obligatorio',
-                    'name.max'       => 'El nombre de la categoria debe tener solamente 255 caracteres'
+                    'name.max'       => 'El nombre de la categoria debe tener solamente 255 caracteres',
+                ]);
+                break;
+
+            case 15:
+                $model = new PaymentTypes();
+                $validated = $request->validate([
+                    'type'   => ['required', 'max:255'],
+                    'status' => ['nullable', 'boolean']
+                ], [
+                    'type.required'  => 'El tipo de pago es obligatorio',
+                    'type.max'       => 'El tipo de pago debe tener solamente 255 caracteres',
+                ]);
+                break;
+            case 16:
+                $model = new Suppliers();
+                $validated = $request->validate([
+                    'name'          => ['required', 'string', 'max:255'],
+                    'last_name'     => ['required', 'string', 'max:255'],
+                    'supplier_name' => ['required', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/', 'max:255'],
+                    'address'       => ['required', 'max:255'],
+                    'nit'           => ['required', 'max:10'],
+                    'city_id'       => ['required'],
+                    'email'         => ['required', 'email'],
+                    'cellphone'     => ['required', 'max:10'],
+                    'phone'         => ['nullable', 'max:10'],
+                    'status'        => ['nullable'],
+                ], [
+                    'name.required'           => 'El nombre del contacto  de la empresa es obligatorio',
+                    'name.string'             => 'El nombre del contacto  de la empresa solo debe tener letras',
+                    'name.max'                => 'El nombre del contacto  de la empresa debe tener maximo 255 caracteres',
+                    'last_name.required'      => 'El apellido del contacto  de la empresa es obligatorio',
+                    'last_name.string'        => 'El apellido del contacto  de la empresa solo debe tener letras',
+                    'last_name.max'           => 'El apellido del contacto  de la empresa debe tener maximo 255 caracteres',
+                    'supplier_name.required'  => 'El nombre de la empresa es obligatorio',
+                    'supplier_name.regex'     => 'El nombre de la empresa no debe contener números',
+                    'supplier_name.max'       => 'El nombre de la empresa maximo debe tener 255 caracteres',
+                    'address.required'        => 'La dirección de la empresa debe ser obligatorio',
+                    'address.max'             => 'La dirección de la empresa, maximo debe tener 255 caracteres',
+                    'nit.required'            => 'El nit de la empresa debe ser obligatorio',
+                    'nit.max'                 => 'El nit de la empresa, maximo debe tener 10 números',
+                    'city_id.required'        => 'La ciudad de la empresa es obligatoria',
+                    'email.required'          => 'El correo de  la empresa es obligatoria',
+                    'email.email'             => 'El correo de la empresa debe tener el formato de un correo, ejemplo@ejemplo.com',
+                    'cellphone.required'      => 'El celular de la empresa debe ser obligatorio',
+                    'cellphone.max'           => 'El celular de la empresa, maximo debe tener 10 digitos',
+                    'phone.max'               => 'El telefono fijo de la empresa debe tener 10 digitos por maximo',
                 ]);
                 break;
             
             default:
                 break;
         }
-
+        
         return $this->configurations->store($validated, $model, $type);
     }
 
@@ -351,6 +409,21 @@ Class ConfigurationServices {
     public function blockBoxCashCreate()
     {
         return $this->configurations->blockBoxCashCreate();
+    }
+
+    public function validateOrder(Request $request)
+    {
+        return $this->configurations->validateOrder($request);
+    }
+
+    public function getTableName(Request $request)
+    {
+        return $this->configurations->getTableName($request);
+    }
+
+    public function getProducts(Request $request)
+    {
+        return $this->configurations->getProducts($request);
     }
 
 }

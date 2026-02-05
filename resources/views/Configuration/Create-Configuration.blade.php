@@ -96,7 +96,7 @@
                     @break
 
                     @case(9)
-                        <h5 class="mb-0">Crear Caja</h5>
+                        <h5 class="mb-0">Crear Pago</h5>
                     @break
 
                     @case(10)
@@ -119,12 +119,20 @@
                         <h5 class="mb-0">Crear Categorias</h5>
                     @break
 
+                    @case(15)
+                        <h5 class="mb-0">Crear Tipos de Pago</h5>
+                    @break
+
+                    @case(16)
+                        <h5 class="mb-0">Crear Proveedor</h5>
+                    @break
+
                     @default
                 @endswitch
             </div>
 
             <div class="card-body">
-                <x-general-form :type="$type" :cities="$cities" :countries="$countries" :roles="$roles" :products="$products" :suppliers="$suppliers" :users="$users" :tables="$tables" :categories="$categories"/>
+                <x-general-form :type="$type" :cities="$cities" :countries="$countries" :roles="$roles" :products="$products" :suppliers="$suppliers" :users="$users" :tables="$tables" :categories="$categories" :paymentTypes="$paymentTypes"/>
             </div>
         </div>
 
@@ -136,7 +144,7 @@
         @endif
 
         @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
             </div>

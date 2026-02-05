@@ -9,13 +9,13 @@ use Illuminate\View\Component;
 class GeneralPaymentModal extends Component
 {
 
-    public $id;
+    public $user;
     /**
      * Create a new component instance.
      */
-    public function __construct($id)
+    public function __construct($user)
     {
-        $this->id = $id;
+        $this->user = $user;
     }
 
     /**

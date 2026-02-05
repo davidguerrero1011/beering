@@ -10,4 +10,11 @@ class CashOutflows extends Model
     use HasFactory;
     protected $fillable = ['amount', 'description', 'user_id', 'transaction_Date' ];
     public $timestamps = true;
+
+    protected $casts = ['transaction_Date' => 'date'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

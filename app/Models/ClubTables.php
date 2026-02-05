@@ -23,6 +23,6 @@ class ClubTables extends Model
 
     public function music()
     {
-        return $this->belongsToMany(Music::class, 'music_by_tables');
+        return $this->belongsToMany(Music::class, 'music_by_tables', 'club_table_id', 'music_id');
     }
 }

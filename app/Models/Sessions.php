@@ -10,9 +10,10 @@ class Sessions extends Model
     use HasFactory;
     protected $fillable = [
         'user_id',
+        'ip_address',
+        'operative_systems',
         'start_date',
         'end_date',
-        'token',
         'status'
     ];
     public $timestamps = true;

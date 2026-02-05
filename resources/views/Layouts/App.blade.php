@@ -27,6 +27,9 @@
     {{-- Bootstrap Library --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    
+    {{-- Notyf Library --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
 
     {{-- Add External Libraries --}}
     @stack('style-libs')
@@ -38,23 +41,19 @@
 <body>
 
     {{-- Add home's menu --}}
-    @include('Resources.Navbar')
+    @auth
+        @include('Resources.Navbar')
+    @endauth
 
 
     {{-- Se incluye el contenido de manera dinamica --}}
     @yield('content')
 
     {{-- Jquery Library --}}
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     {{-- Bootstrap Js Library --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
-        integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous">
-    </script>
 
     {{-- Sweet Alert Library --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -62,8 +61,12 @@
     {{-- Axios CDN --}}
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-    <script src="{{ asset('js/home/home.js') }}"></script>
+    {{-- Notyf Library Script --}}
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+
+    {{-- Custom Scripts --}}
     <script src="{{ asset('js/resources/navbar.js') }}"></script>
+    <script src="{{ asset('js/home/home.js') }}"></script>
 
     @stack('scripts')
     @stack('graph-colors')

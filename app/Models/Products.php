@@ -16,13 +16,13 @@ class Products extends Model
         return $this->hasMany(Inventaries::class);
     }
 
-    public function preparations()
-    {
-        return $this->hasMany(Preparations::class);
-    }
-
     public function category()
     {
         return $this->belongsTo(Categories::class);
+    }
+
+    public function productsByTables()
+    {
+        return $this->hasMany(ProductsbyTable::class);
     }
 }

@@ -1,5 +1,5 @@
 <div>
-    <form action="{{ route('store', ['type' => $type]) }}" method="POST">
+    <form action="{{ route('store', ['type' => $type]) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @switch($type)
             @case(1)
@@ -86,13 +86,13 @@
                 <div id="normalUsers">
                     <div class="mb-4">
                         <label for="name" class="form-label">Nombre</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
-                            placeholder="Escribe el nombre" value="{{ old('name') }}">
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                            name="name" placeholder="Escribe el nombre" value="{{ old('name') }}">
                         @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-    
+
                     <div class="mb-4">
                         <label for="last_name" class="form-label">Apellidos</label>
                         <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name"
@@ -101,7 +101,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-    
+
                     <div class="mb-4">
                         <label for="birthday" class="form-label">Cumpleaños</label>
                         <input type="date" class="form-control" id="birthday" name="birthday">
@@ -119,7 +119,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-    
+
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
@@ -145,13 +145,14 @@
                     </div>
                     <div class="mb-4">
                         <label for="supplier_name" class="form-label">Nombre Proveedor</label>
-                        <input type="text" class="form-control @error('supplier_name') is-invalid @enderror" id="supplier_name" name="supplier_name"
-                            placeholder="Ingrese el nombre del proveedor" value="{{ old('supplier_name') }}">
+                        <input type="text" class="form-control @error('supplier_name') is-invalid @enderror"
+                            id="supplier_name" name="supplier_name" placeholder="Ingrese el nombre del proveedor"
+                            value="{{ old('supplier_name') }}">
                         @error('supplier_name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-    
+
                     <div class="mb-4">
                         <label for="nit" class="form-label">NIT</label>
                         <input type="text" class="form-control @error('nit') is-invalid @enderror" id="nit"
@@ -209,7 +210,7 @@
                         @endforelse
                     </select>
                 </div>
-    
+
                 <div class="form-check form-switch mb-4">
                     <input type="hidden" name="status" value="0">
                     <input class="form-check-input" type="checkbox" role="switch" id="status" name="status"
@@ -299,12 +300,12 @@
             @break
 
             @case(7)
-                {{-- Entries --}}
+                {{-- Cash Boxes --}}
                 <div class="mb-4">
-                    <label for="cash_inflow" class="form-label">Ingreso</label>
-                    <input type="number" class="form-control @error('cash_inflow') is-invalid @enderror" id="cash_inflow"
-                        name="cash_inflow" placeholder="Ingrese el pago" value="{{ old('cash_inflow') }}">
-                    @error('cash_inflow')
+                    <label for="net_income" class="form-label">Ingreso</label>
+                    <input type="number" class="form-control @error('net_income') is-invalid @enderror" id="net_income"
+                        name="net_income" placeholder="Ingrese el pago" value="{{ old('net_income') }}">
+                    @error('net_income')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -338,13 +339,6 @@
                     @error('date_entry')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div>
-
-                <div class="form-check form-switch mb-4">
-                    <input type="hidden" name="status" value="0">
-                    <input class="form-check-input" type="checkbox" role="switch" id="status" name="status"
-                        value="1" {{ old('status', true) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="status">Estado</label>
                 </div>
             @break
 
@@ -383,8 +377,8 @@
 
                 <div class="mb-4">
                     <label for="transaction_Date" class="form-label">Fecha de Pago</label>
-                    <input type="date" class="form-control @error('transaction_Date') is-invalid @enderror" id="transaction_Date"
-                        name="transaction_Date" value="{{ old('transaction_Date') }}">
+                    <input type="date" class="form-control @error('transaction_Date') is-invalid @enderror"
+                        id="transaction_Date" name="transaction_Date" value="{{ old('transaction_Date') }}">
                     @error('transaction_Date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -392,12 +386,12 @@
             @break
 
             @case(9)
-                {{-- Cash Box --}}
+                {{-- Payments --}}
                 <div class="mb-4">
-                    <label for="net_income" class="form-label">Dinero Caja</label>
-                    <input type="number" class="form-control @error('net_income') is-invalid @enderror" id="net_income"
-                        name="net_income" placeholder="Ingrese el dinero de caja" value="{{ old('net_income') }}">
-                    @error('net_income')
+                    <label for="amount" class="form-label">Cantidad</label>
+                    <input type="number" class="form-control @error('amount') is-invalid @enderror" id="amount"
+                        name="amount" placeholder="Ingrese el pago a realizar" value="{{ old('amount') }}">
+                    @error('amount')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -425,19 +419,12 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="date_entry" class="form-label">Fecha de ingreso caja</label>
-                    <input type="date" class="form-control @error('date_entry') is-invalid @enderror" id="date_entry"
-                        name="date_entry" value="{{ old('date_entry') }}">
-                    @error('date_entry')
+                    <label for="transaction_Date" class="form-label">Fecha de ingreso caja</label>
+                    <input type="date" class="form-control @error('transaction_Date') is-invalid @enderror"
+                        id="transaction_Date" name="transaction_Date" value="{{ old('transaction_Date') }}">
+                    @error('transaction_Date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div>
-
-                <div class="form-check form-switch mb-4">
-                    <input type="hidden" name="status" value="0">
-                    <input class="form-check-input" type="checkbox" role="switch" id="status" name="status"
-                        value="1" {{ old('status', true) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="status">Estado</label>
                 </div>
             @break
 
@@ -500,8 +487,8 @@
             @case(11)
                 {{-- Preparaciones --}}
                 <div class="form-check form-switch mb-4">
-                    <label for="product_id" class="form-label">Productos</label>
-                    <select class="form-select" id="product_id" name="product_id[]" multiple>
+                    <label for="products" class="form-label">Productos</label>
+                    <select class="form-select" id="products" name="products[]" multiple required>
                         @forelse ($products as $product)
                             <option value="{{ $product->id }}">{{ $product->product }}</option>
                         @empty
@@ -509,7 +496,6 @@
                         @endforelse
                     </select>
                 </div>
-
 
                 <div class="mb-4">
                     <label for="preparation" class="form-label">Titulo Preparación</label>
@@ -553,8 +539,7 @@
                 <div class="mb-4">
                     <label for="song" class="form-label">Canción</label>
                     <input type="text" class="form-control @error('song') is-invalid @enderror" id="song"
-                        name="song" placeholder="Ingrese el titulo de la canción"
-                        value="{{ old('song') }}">
+                        name="song" placeholder="Ingrese el titulo de la canción" value="{{ old('song') }}">
                     @error('song')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -563,8 +548,7 @@
                 <div class="mb-4">
                     <label for="artist" class="form-label">Artista</label>
                     <input type="text" class="form-control @error('artist') is-invalid @enderror" id="artist"
-                        name="artist" placeholder="Ingrese el artista de la canción"
-                        value="{{ old('artist') }}">
+                        name="artist" placeholder="Ingrese el artista de la canción" value="{{ old('artist') }}">
                     @error('artist')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -572,23 +556,28 @@
 
                 <div class="form-check form-switch mb-4">
                     <label for="club_table_id" class="form-label">Mesa</label>
-                    <select class="form-select" id="club_table_id" name="club_table_id">
-                        <option selected>Seleccione la mesa</option>
+                    <select class="form-select @error('club_table_id') is-invalid @enderror" id="club_table_id" name="club_table_id">
+                        <option value="" selected>Seleccione la mesa</option>
                         @forelse ($tables as $table)
                             <option value="{{ $table->id }}">{{ $table->table }} - {{ $table->number }}</option>
                         @empty
                             <option value="0">No hay mesas creadas</option>
                         @endforelse
                     </select>
+                     @error('club_table_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="mb-4">
                     <label for="order" class="form-label">Orden</label>
                     <input type="text" class="form-control @error('order') is-invalid @enderror" id="order"
-                        name="order" placeholder="Ingrese el orden de la canción" value="{{ old('order') }}">
+                        name="order" data-type="12" placeholder="Ingrese el orden de la canción"
+                        value="{{ old('order') }}" onblur="validateOrders(this.value, 12)">
                     @error('order')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
+                    <span id="orderMessage"></span>
                 </div>
 
                 <div class="form-check form-switch mb-4">
@@ -667,12 +656,121 @@
                 </div>
             @break
 
+            @case(15)
+                {{-- Payment Types --}}
+                <div class="mb-4">
+                    <label for="type" class="form-label">Tipo de Págo</label>
+                    <input type="text" class="form-control @error('type') is-invalid @enderror" id="type"
+                        name="type" placeholder="Ingrese el nombre de la categoria" value="{{ old('type') }}">
+                    @error('type')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="form-check form-switch mb-4">
+                    <input type="hidden" name="status" value="0">
+                    <input class="form-check-input" type="checkbox" role="switch" id="status" name="status"
+                        value="1" {{ old('status', true) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="status">Estado</label>
+                </div>
+            @break
+
+            @case(16)
+                {{-- Suppliers --}}
+                <div class="mb-4">
+                    <label for="supplier_name" class="form-label">Nombre Empresa</label>
+                    <input type="text" class="form-control @error('supplier_name') is-invalid @enderror" id="supplier_name"
+                        name="supplier_name" placeholder="Ingrese el nombre de la empresa" value="{{ old('supplier_name') }}">
+                    @error('supplier_name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-4">
+                    <label for="address" class="form-label">Dirección Empresa</label>
+                    <input type="text" class="form-control @error('address') is-invalid @enderror" id="address"
+                        name="address" placeholder="Ingrese la dirección de la empresa" value="{{ old('address') }}">
+                    @error('address')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-4">
+                    <label for="nit" class="form-label">NIT Empresa</label>
+                    <input type="text" class="form-control @error('nit') is-invalid @enderror" id="nit"
+                        name="nit" placeholder="Ingrese el nit de la empresa" value="{{ old('nit') }}">
+                    @error('nit')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="form-check form-switch mb-4">
+                    <label for="city_id" class="form-label">Ciudad</label>
+                    <select class="form-select" id="city_id" name="city_id">
+                        <option selected>Seleccione una categoria</option>
+                        @forelse ($cities as $city)
+                            <option value="{{ $city->id }}">{{ $city->name }}</option>
+                        @empty
+                            <option value="0">No hay ciudades creadas</option>
+                        @endforelse
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+                        name="email" placeholder="Ingrese el correo de la empresa" value="{{ old('email') }}">
+                    @error('email')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-4">
+                    <label for="cellphone" class="form-label">Celular</label>
+                    <input type="cellphone" class="form-control @error('cellphone') is-invalid @enderror" id="cellphone"
+                        name="cellphone" placeholder="Ingrese el celular de la empresa" value="{{ old('cellphone') }}">
+                    @error('cellphone')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-4">
+                    <label for="phone" class="form-label">Telefono Fijo</label>
+                    <input type="phone" class="form-control @error('phone') is-invalid @enderror" id="phone"
+                        name="phone" placeholder="Ingrese el telefono fijo de la empresa" value="{{ old('phone') }}">
+                    @error('phone')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-4">
+                    <label for="name" class="form-label">Nombre Contacto</label>
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                        name="name" placeholder="Ingrese el nombre del contacto de la empresa" value="{{ old('name') }}">
+                    @error('name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-4">
+                    <label for="last_name" class="form-label">Apellido Contacto</label>
+                    <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name"
+                        name="last_name" placeholder="Ingrese el apellido del contacto de la empresa" value="{{ old('last_name') }}">
+                    @error('last_name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="form-check form-switch mb-4">
+                    <input type="hidden" name="status" value="0">
+                    <input class="form-check-input" type="checkbox" role="switch" id="status" name="status"
+                        value="1" {{ old('status', true) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="status">Estado</label>
+                </div>
+            @break
+
             @default
         @endswitch
         <div class="d-grid">
-            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm mb-3">Guardar</button>
+            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm mb-3" @if($type == 12) disabled @endif id="saveCategory">Guardar</button>
             <a type="submit" class="btn btn-outline-primary btn-lg rounded-pill shadow-sm"
                 href="{{ route('list', ['type' => $type]) }}">Cancelar</a>
         </div>
     </form>
 </div>
+
+@push('scripts')
+    <script src="{{ asset('js/configuration/configuration.js') }}"></script>
+@endpush

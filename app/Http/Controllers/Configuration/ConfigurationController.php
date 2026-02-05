@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Configuration;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CountriesRequest;
 use App\Http\Requests\UpdateCountriesRequest;
 use App\Models\CashBoxes;
 use App\Services\Configurations\ConfigurationServices;
@@ -21,8 +20,6 @@ class ConfigurationController extends Controller
     public function index(int $type, Request $request)
     {
         $information = $this->configuration->index($type, $request);
-        Log::info("information");
-        Log::info($information->toArray());
         $block = $this->configuration->blockBoxCashCreate();
         $currenCash = CashBoxes::where([ ['status', 1], ['date_entry', date('Y-m-d')]])->orderBy('created_at', 'desc')->first();
 
@@ -44,8 +41,9 @@ class ConfigurationController extends Controller
         $users = $data["users"];
         $tables = $data["tables"];
         $categories = $data["categories"];
+        $paymentTypes = $data["paymentTypes"];
 
-        return view('Configuration.Create-Configuration', compact('type', 'cities', 'countries', 'roles', 'products', 'suppliers', 'users', 'tables', 'categories'));
+        return view('Configuration.Create-Configuration', compact('type', 'cities', 'countries', 'roles', 'products', 'suppliers', 'users', 'tables', 'categories', 'paymentTypes'));
     }
 
     /**
@@ -73,7 +71,6 @@ class ConfigurationController extends Controller
         $data = $allData->getData(true);
 
         $information = $this->configuration->show($id, $type);
-
         $countries = $data["countries"];
         $cities = $data["cities"];
         $roles = $data["roles"];
@@ -81,8 +78,10 @@ class ConfigurationController extends Controller
         $suppliers = $data["suppliers"];
         $users = $data["users"];
         $categories = $data["categories"];
+        $tables = $data["tables"];
+        $paymentTypes = $data["paymentTypes"];
 
-        return view('Configuration.Edit-Configuration', compact('cities', 'id', 'type', 'countries', 'roles', 'products', 'suppliers', 'users', 'information', 'categories'));
+        return view('Configuration.Edit-Configuration', compact('cities', 'id', 'type', 'countries', 'roles', 'products', 'suppliers', 'users', 'information', 'categories', 'tables', 'paymentTypes'));
     }
 
     /**
@@ -99,5 +98,29 @@ class ConfigurationController extends Controller
     public function destroy(int $id, int $type)
     {
         return $this->configuration->destroy($id, $type);
+    }
+
+    /**
+     * Validate the order number.
+     */
+    public function validateOrder(Request $request)
+    {
+        return $this->configuration->validateOrder($request);
+    }
+
+    /**
+     * Validate the order number.
+     */
+    public function getTableName(Request $request)
+    {
+        return $this->configuration->getTableName($request);
+    }
+
+    /**
+     * Validate the order number.
+     */
+    public function getProducts(Request $request)
+    {
+        return $this->configuration->getProducts($request);
     }
 }

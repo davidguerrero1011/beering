@@ -21,6 +21,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
+    {{-- Bootstrap Icons --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
 </head>
 
 <body>
@@ -31,6 +34,21 @@
             <div class="container">
                 <div class="row align-items-center justify-content-center">
                     <div class="col-md-7">
+
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                            </div>
+                        @endif
+
+                        @if (session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                            </div>
+                        @endif
+
                         @if ($errors->has('email'))
                             <div class="alert alert-dange">
                                 {{ $errors->first('email') }}
@@ -68,9 +86,15 @@
                                 </label>
                                 <span class="ml-auto"><a href="#" class="forgot-pass">Olvido su password</a></span>
                             </div>
+                            <button type="submit" class="btn btn-block btn-primary">
+                                <i class="bi bi-key"></i>  Ingresar
+                            </button>
 
-                            <button type="submit" class="btn btn-block btn-primary">Ingresar</button>
-
+                            <div class="d-flex mt-3 align-items-center">
+                                <a href="{{ route('google.redirect') }}" class="btn btn-danger">
+                                    <i class="bi bi-google"></i> Autenticación con Google
+                                </a>
+                            </div>
                         </form>
                     </div>
                 </div>

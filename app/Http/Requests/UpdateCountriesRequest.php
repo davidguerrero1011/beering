@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Roles;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class UpdateCountriesRequest extends FormRequest
 {
@@ -22,124 +24,81 @@ class UpdateCountriesRequest extends FormRequest
     public function rules(): array
     {
         $type = $this->route('type');
-
         switch ($type) {
             case 1:
                 $rules = ['name'   => ['required', 'string', 'max:255']];
                 break;
 
             case 2:
-                $rules = ['name' => ['required', 'string', 'max:255'], 'country_id' => ['required']];
+                $rules = ['name' => ['required', 'string', 'max:255'], 'country_id' => ['required'], 'status' => ['nullable', 'boolean']];
                 break;
             case 3:
                 $rules = ['name' => ['required', 'string', 'max:255']];
                 break;
             case 4:
-                // $role = Roles::where('id', $request->role_id)->first();
-                // if ($role->name == "Proveedores") {
-
-                //     $model = new Suppliers();
-                //     $validated = $request->validate([
-                //         'user_id' => ['required'],
-                //         'supplier_name' => ['required', 'string', 'max:255'],
-                //         'address' => ['required', 'max:255'],
-                //         'nit' => ['required', 'max:10'],
-                //         'city_id' => ['required'],
-                //         'email' => ['required', 'email', 'unique:users,email'],
-                //         'cellphone' => ['required', 'max:10'],
-                //         'phone' => ['required', 'max:7'],
-                //     ], [
-                //         'user_id.required' => 'El usuario es obligatorio',
-                //         'supplier_name.required' => 'El nombre del proveedor es obligatorio',
-                //         'supplier_name.string' => 'El nombre del proveedor debe tener solo letras',
-                //         'supplier_name.max' => 'El nombre del proveedor debe tener máximo 255 caracteres',
-                //         'address.required' => 'La dirección del proveedor es obligatoria',
-                //         'address.max' => 'La dirección del proveedor debe tener maximo 255 caracteres',
-                //         'nit.required' => 'El nit del proveedor es obligatorio',
-                //         'nit.max' => 'El nit del proveedor debe tener máximo 255 caracteres',
-                //         'city_id.required' => 'La ciudad del proveedor es obligatoria',
-                //         'email.required' => 'El correo del proveedor es obligatorio',
-                //         'email.email' => 'El correo del proveedor no tiene el formato adecuado',
-                //         'email.unique' => 'El correo del proveedor ya existe, corrijalo por favor',
-                //         'cellphone.required' => 'El celular del proveedor es obligatorio',
-                //         'cellphone.max' => 'El celular del proveedor maximo debe tener 10 caracteres',
-                //         'phone.required' => 'El telefono fijo del proveedor es obligatorio',
-                //         'phone.max' => 'El telefono fijo del proveedor debe tener maximo 7 caracteres'
-                //     ]);
-
-                // } else {
-
-                //     $model = new User();
-                //     $validated = $request->validate([
-                //         'name' => ['required', 'string', 'max:255'],
-                //         'last_name' => ['required', 'string', 'max:255'],
-                //         'birthday' => ['required', 'date'],
-                //         'cellphone' => ['required', 'max:10'],
-                //         'email' => ['required', 'email', 'unique:users,email'],
-                //         'address' => ['required'],
-                //         'neightboarhood' => ['required', 'string'],
-                //         'password' => ['required', 'min:5', 'max:15'],
-                //         'city_id' => ['required'],
-                //         'role_id' => ['required']
-                //     ], [
-                //         'name.required' => 'El nombre del pais es obligatorio',
-                //         'name.string' => 'El nombre del pais debe tener solo letras',
-                //         'name.max' => 'El nombre del pais debe tener máximo 255 caracteres',
-                //         'last_name.required' => 'El apellido del usuario es obligatorio',
-                //         'last_name.string' => 'El apellido del usuario debe tener solo letras',
-                //         'last_name.max' => 'El apellido del usuario debe tener máximo 255 caracteres',
-                //         'birthday.required' => 'La fecha de cumpleaños del usuario es obligatorio',
-                //         'birthday.date' => 'La fecha de cumpleaños del usuario debe tener el formato fecha (AAAA-MM-DD)',
-                //         'cellphone.required' => 'El número  de celular del usuario es obligatorio',
-                //         'cellphone.max' => 'El número  de celular del usuario debe tener maximo 10 digitos',
-                //         'email.required' => 'El correo del usuario es obligatorio',
-                //         'email.email' => 'El correo del usuario no tiene el formato adecuado',
-                //         'email.unique' => 'El correo del usuario ya existe, corrijalo por favor',
-                //         'address.required' => 'La dirección del usuario es obligatoria',
-                //         'neightboarhood.required' => 'El nombre del barrio donde vive el usuario es obligatoria',
-                //         'neightboarhood.string' => 'El nombre del barrio donde vive el usuario no puede tener números',
-                //         'password.required' => 'La contraseña del usuario es obligatoria',
-                //         'password.min' => 'La contraseña del usuario minimo debe tener 5 caracteres',
-                //         'password.max' => 'La contraseña del usuario maximo debe tener 15 caracteres',
-                //         'city_id.required' => 'La ciudad del usuario es obligatorio',
-                //         'role_id.required' => 'El rol del usuario es obligatorio'
-                //     ]);
-
-                // }
-
+                $role = Roles::where('id', $this->input('role_id'))->first();
+                if ($role->name == "Proveedores") {
+                    $rules = [
+                        'user_id' => ['required'],
+                        'supplier_name' => ['required', 'string', 'max:255'],
+                        'address' => ['required', 'max:255'],
+                        'nit' => ['required', 'max:10'],
+                        'city_id' => ['required'],
+                        'email' => ['required', 'email', 'unique:users,email,' . $this->route('id')],
+                        'cellphone' => ['required', 'max:10'],
+                        'phone' => ['required', 'max:7'],
+                    ];
+                } else {
+                    $rules = [
+                        'name' => ['required', 'string', 'max:255'],
+                        'last_name' => ['required', 'string', 'max:255'],
+                        'birthday' => ['required', 'date'],
+                        'cellphone' => ['required', 'max:10'],
+                        'email' => ['required', 'email', 'unique:users,email,' . $this->route('id')],
+                        'address' => ['required'],
+                        'neightboarhood' => ['required', 'string'],
+                        'password' => ['required', 'min:5', 'max:15'],
+                        'city_id' => ['required'],
+                        'role_id' => ['required']
+                    ];
+                }
                 break;
             case 5:
-                $rules = ['table' => ['required', 'max:255'], 'number' => ['required']]; 
+                $rules = ['table' => ['required', 'max:255'], 'number' => ['required'], 'state' => ['required'], 'status' => ['nullable', 'boolean']]; 
                 break;
             case 6:
                 $rules = ['product_id' => ['required'], 'supplier_id' => ['required'], 'amont' => ['required', 'integer', 'min:0'], 'prize' => ['required', 'integer', 'min:0']];
                 break;
             case 7:
-                    $rules = ['cash_inflow' => ['required', 'integer', 'min:0'], 'description' => ['required', 'max:1000'], 'user_id' => ['required'], 'date_entry' => ['required', 'date']];
+                    $rules = ['net_income' => ['required', 'integer', 'min:0'], 'description' => ['required', 'max:1000'], 'user_id' => ['required'], 'date_entry' => ['required', 'date']];
                     break;
             case 8:
-                    $rules = ['amount' => ['required', 'integer', 'min:0'], 'description' => ['required', 'max:1000'], 'user_id' => ['required'], 'transaction_Date' => ['required', 'date']];
-                    break;
+                $rules = ['amount' => ['required', 'numeric', 'min:0'], 'description' => ['required', 'max:1000'], 'user_id' => ['required'], 'transaction_Date' => ['required', 'date']];
+                break;
             case 9:
-                $rules = ['net_income' => ['required', 'integer', 'min:0'], 'description' => ['required', 'max:1000'], 'user_id' => ['required'], 'date_entry' => ['required', 'date']];
+                $rules = ['amount' => ['required', 'numeric', 'min:0'], 'description' => ['required', 'max:1000'], 'user_id' => ['required'], 'transaction_Date' => ['required', 'date']];
                 break;
             case 10:
                 $rules = ['promotion' => ['required', 'max:255'], 'description' => ['required', 'max:1000'], 'prize' => ['required', 'integer', 'min:0'], 'start_date' => ['required', 'date'], 'end_date' => ['required', 'date']];
                 break;
             case 11:
-                $rules = ['product_id' => ['required'], 'preparation' => ['required', 'max:255'], 'description' => ['required', 'max:1000'], 'quantity' => ['required', 'integer', 'min:0']];
+                $rules = ['product_id' => ['required'], 'preparation' => ['required', 'max:255'], 'preparation_id' => ['nullable'], 'description' => ['required', 'max:1000'], 'quantity' => ['required', 'integer', 'min:0']];
                 break;
             case 12:
-                $rules = ['song' => ['required', 'max:255'], 'artist' => ['required', 'max:255'], 'club_table_id' => ['required'], 'order' => ['required']];
+                $rules = ['song' => ['required', 'max:255'], 'artist' => ['required', 'max:255'], 'club_table_id' => ['required'], 'order' => ['required'], 'music_by_table_id' => ['required'], 'music_id' => ['required']];
                 break;
             case 13:
                 $rules = ['product' => ['required', 'max:255'], 'category_id' => ['required'], 'units' => ['required', 'string'], 'prize_unit' => ['required', 'numeric']];
                 break;
-
             case 14:
-                $rules = ['name' => ['required', 'max:255']];
+                $rules = ['name' => ['required', 'max:255'], 'status' => ['nullable', 'boolean']];
                 break;
-            
+            case 15:
+                $rules = ['type' => ['required', 'max:255'], 'status' => ['nullable', 'boolean']];
+                break;
+            case 16:
+                $rules = ['user_id' => ['required'], 'supplier_name' => ['required', 'max:255'], 'address' => ['required', 'max:255'], 'nit' => ['required', 'max:10'], 'city_id' => ['required'], 'email' => ['required', 'email'], 'cellphone' => ['required', 'max:10'], 'phone' => ['required', 'max:7'], 'name' => ['required', 'max:255', 'string'], 'last_name' => ['required', 'max:255', 'string'], 'status' => ['nullable']];
+                break;
             default:
                 break;
         }
@@ -177,47 +136,51 @@ class UpdateCountriesRequest extends FormRequest
                 ];
                 break;
             case 4:
-                // $messages = [
-                //     'user_id.required' => 'El usuario es obligatorio',
-                //     'supplier_name.required' => 'El nombre del proveedor es obligatorio',
-                //     'supplier_name.string' => 'El nombre del proveedor debe tener solo letras',
-                //     'supplier_name.max' => 'El nombre del proveedor debe tener máximo 255 caracteres',
-                //     'address.required' => 'La dirección del proveedor es obligatoria',
-                //     'address.max' => 'La dirección del proveedor debe tener maximo 255 caracteres',
-                //     'nit.required' => 'El nit del proveedor es obligatorio',
-                //     'nit.max' => 'El nit del proveedor debe tener máximo 255 caracteres',
-                //     'city_id.required' => 'La ciudad del proveedor es obligatoria',
-                //     'email.required' => 'El correo del proveedor es obligatorio',
-                //     'email.email' => 'El correo del proveedor no tiene el formato adecuado',
-                //     'email.unique' => 'El correo del proveedor ya existe, corrijalo por favor',
-                //     'cellphone.required' => 'El celular del proveedor es obligatorio',
-                //     'cellphone.max' => 'El celular del proveedor maximo debe tener 10 caracteres',
-                //     'phone.required' => 'El telefono fijo del proveedor es obligatorio',
-                //     'phone.max' => 'El telefono fijo del proveedor debe tener maximo 7 caracteres'
-                // ];
-                // $messages = [
-                //     'name.required' => 'El nombre del pais es obligatorio',
-                //     'name.string' => 'El nombre del pais debe tener solo letras',
-                //     'name.max' => 'El nombre del pais debe tener máximo 255 caracteres',
-                //     'last_name.required' => 'El apellido del usuario es obligatorio',
-                //     'last_name.string' => 'El apellido del usuario debe tener solo letras',
-                //     'last_name.max' => 'El apellido del usuario debe tener máximo 255 caracteres',
-                //     'birthday.required' => 'La fecha de cumpleaños del usuario es obligatorio',
-                //     'birthday.date' => 'La fecha de cumpleaños del usuario debe tener el formato fecha (AAAA-MM-DD)',
-                //     'cellphone.required' => 'El número  de celular del usuario es obligatorio',
-                //     'cellphone.max' => 'El número  de celular del usuario debe tener maximo 10 digitos',
-                //     'email.required' => 'El correo del usuario es obligatorio',
-                //     'email.email' => 'El correo del usuario no tiene el formato adecuado',
-                //     'email.unique' => 'El correo del usuario ya existe, corrijalo por favor',
-                //     'address.required' => 'La dirección del usuario es obligatoria',
-                //     'neightboarhood.required' => 'El nombre del barrio donde vive el usuario es obligatoria',
-                //     'neightboarhood.string' => 'El nombre del barrio donde vive el usuario no puede tener números',
-                //     'password.required' => 'La contraseña del usuario es obligatoria',
-                //     'password.min' => 'La contraseña del usuario minimo debe tener 5 caracteres',
-                //     'password.max' => 'La contraseña del usuario maximo debe tener 15 caracteres',
-                //     'city_id.required' => 'La ciudad del usuario es obligatorio',
-                //     'role_id.required' => 'El rol del usuario es obligatorio'
-                // ];
+                $role = Roles::where('id', $this->input('role_id'))->first();
+                if ($role->name == "Proveedores") {
+                    $messages = [
+                        'user_id.required' => 'El usuario es obligatorio',
+                        'supplier_name.required' => 'El nombre del proveedor es obligatorio',
+                        'supplier_name.string' => 'El nombre del proveedor debe tener solo letras',
+                        'supplier_name.max' => 'El nombre del proveedor debe tener máximo 255 caracteres',
+                        'address.required' => 'La dirección del proveedor es obligatoria',
+                        'address.max' => 'La dirección del proveedor debe tener maximo 255 caracteres',
+                        'nit.required' => 'El nit del proveedor es obligatorio',
+                        'nit.max' => 'El nit del proveedor debe tener máximo 255 caracteres',
+                        'city_id.required' => 'La ciudad del proveedor es obligatoria',
+                        'email.required' => 'El correo del proveedor es obligatorio',
+                        'email.email' => 'El correo del proveedor no tiene el formato adecuado',
+                        'email.unique' => 'El correo del proveedor ya existe, corrijalo por favor',
+                        'cellphone.required' => 'El celular del proveedor es obligatorio',
+                        'cellphone.max' => 'El celular del proveedor maximo debe tener 10 caracteres',
+                        'phone.required' => 'El telefono fijo del proveedor es obligatorio',
+                        'phone.max' => 'El telefono fijo del proveedor debe tener maximo 7 caracteres'
+                    ];
+                } else {
+                    $messages = [
+                        'name.required' => 'El nombre del pais es obligatorio',
+                        'name.string' => 'El nombre del pais debe tener solo letras',
+                        'name.max' => 'El nombre del pais debe tener máximo 255 caracteres',
+                        'last_name.required' => 'El apellido del usuario es obligatorio',
+                        'last_name.string' => 'El apellido del usuario debe tener solo letras',
+                        'last_name.max' => 'El apellido del usuario debe tener máximo 255 caracteres',
+                        'birthday.required' => 'La fecha de cumpleaños del usuario es obligatorio',
+                        'birthday.date' => 'La fecha de cumpleaños del usuario debe tener el formato fecha (AAAA-MM-DD)',
+                        'cellphone.required' => 'El número  de celular del usuario es obligatorio',
+                        'cellphone.max' => 'El número  de celular del usuario debe tener maximo 10 digitos',
+                        'email.required' => 'El correo del usuario es obligatorio',
+                        'email.email' => 'El correo del usuario no tiene el formato adecuado',
+                        'email.unique' => 'El correo del usuario ya existe, corrijalo por favor',
+                        'address.required' => 'La dirección del usuario es obligatoria',
+                        'neightboarhood.required' => 'El nombre del barrio donde vive el usuario es obligatoria',
+                        'neightboarhood.string' => 'El nombre del barrio donde vive el usuario no puede tener números',
+                        'password.required' => 'La contraseña del usuario es obligatoria',
+                        'password.min' => 'La contraseña del usuario minimo debe tener 5 caracteres',
+                        'password.max' => 'La contraseña del usuario maximo debe tener 15 caracteres',
+                        'city_id.required' => 'La ciudad del usuario es obligatorio',
+                        'role_id.required' => 'El rol del usuario es obligatorio'
+                    ];
+                }
                 break;
 
             case 5:
@@ -333,7 +296,37 @@ class UpdateCountriesRequest extends FormRequest
                     'name.max'       => 'El nombre de la categoria debe tener solamente 255 caracteres'
                 ];
                 break;
-            
+            case 15:
+                $messages = [
+                    'type.required'  => 'El tipo de pago es obligatorio',
+                    'type.max'       => 'El tipo de pago debe tener solamente 255 caracteres'
+                ];
+                break;
+            case 16:
+                $messages = [
+                    'user_id.required'       => 'El usuario es obligatorio',
+                    'supplier_name.required' => 'El nombre de la compañia es obligatorio',
+                    'supplier_name.max'      => 'El nombre solo debe tener 255 caracteres',
+                    'address.required'       => 'La dirección de la compañia es obligatorio',
+                    'address.max'            => 'La dirección solo debe tener 255 caracteres',
+                    'nit.required'           => 'El NIT de la compañia es obligatorio',
+                    'nit.max'                => 'El NIT solo debe tener 255 caracteres',
+                    'city_id.required'       => 'La ciudad de la compañia es obligatorio',
+                    'email.required'         => 'El correo de la compañia es obligatorio',
+                    'email.email'            => 'El correo de la compañia debe ser formato correo',
+                    'cellphone.required'     => 'El número de celular de la compañia es obligatorio',
+                    'cellphone.max'          => 'El número de celular debe tener maximo 10 digitos',
+                    'phone.required'         => 'El telefono fijo de la compañia es obligatorio',
+                    'phone.max'              => 'El telefono fijo debe tener maximo 7 digitos',
+                    'name.required'          => 'El nombre del contacto es obligatorio',
+                    'name.max'               => 'El nombre del contacto debe tener maximo 255 digitos',
+                    'name.string'            => 'El nombre del contacto debe ser solamente letras',
+                    'last_name.required'     => 'El apellido del contacto es obligatorio',
+                    'last_name.max'          => 'El apellido del contacto debe tener maximo 255 digitos',
+                    'last_name.string'       => 'El apellido del contacto debe ser solamente letras',
+                ];
+                break;
+
             default:
                 break;
         }

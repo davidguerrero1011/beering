@@ -18,11 +18,12 @@ class GeneralForm extends Component
     public $users;
     public $tables;
     public $categories;
+    public $paymentTypes;
 
     /**
      * Create a new component instance.
      */
-    public function __construct(int $type, $cities, $countries, $roles, $products, $suppliers, $users, $tables, $categories)
+    public function __construct(int $type, $cities, $countries, $roles, $products, $suppliers, $users, $tables, $categories, $paymentTypes)
     {
         $this->type = $type;
         $this->cities = $cities;
@@ -33,6 +34,7 @@ class GeneralForm extends Component
         $this->users = $users;
         $this->tables = $tables;
         $this->categories = $categories;
+        $this->paymentTypes = $paymentTypes;
     }
 
     /**

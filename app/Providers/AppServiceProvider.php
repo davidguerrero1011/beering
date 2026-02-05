@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Repositories\Accounts\AccountsRepository;
 use App\Repositories\Configuration\ConfigurationRepository;
 use App\Repositories\Home\HomeRepository;
+use App\Repositories\Interfaces\Account\AccountInterface;
 use App\Repositories\Interfaces\Configurations\ConfigurationInterface;
 use App\Repositories\Interfaces\Home\HomeInterface;
 use Illuminate\Pagination\Paginator;
@@ -18,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(ConfigurationInterface::class, ConfigurationRepository::class);
         $this->app->bind(HomeInterface::class, HomeRepository::class);
+        $this->app->bind(AccountInterface::class, AccountsRepository::class);
     }
 
     /**

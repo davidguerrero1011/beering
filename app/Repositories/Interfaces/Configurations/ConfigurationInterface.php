@@ -16,4 +16,7 @@ interface ConfigurationInterface {
     public function destroy(int $id, int $type);
     public function updateStatus(Request $request);
     public function blockBoxCashCreate();
+    public function validateOrder(Request $request);
+    public function getTableName(Request $request);
+    public function getProducts(Request $request);
 }

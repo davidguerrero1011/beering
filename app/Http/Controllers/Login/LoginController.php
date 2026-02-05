@@ -4,9 +4,14 @@ namespace App\Http\Controllers\Login;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Login\LoginRequest;
+use App\Models\Roles;
 use App\Models\Sessions;
+use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
@@ -28,6 +33,14 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
+            Sessions::create([
+                'user_id'          => Auth::user()->id,
+                'ip_address'       => $request->ip(),
+                'operative_system' => $request->header('User-Agent'),
+                'start_date'       => now()->format('Y-m-d'),
+                'end_date'         => null
+            ]);
+
             return redirect()->route('home');
         }
 
@@ -39,7 +52,6 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-
             $user = Auth::user();
             Sessions::where('user_id', $user->id)->update(['end_date' => now()]);
 
@@ -51,27 +63,46 @@ class LoginController extends Controller
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function redirectToGoogle()
     {
-        //
+        return Socialite::driver('google')->redirect();
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function redirectGoogleCallback()
     {
-        //
-    }
+        try {
+            $googleUser = Socialite::driver('google')->user();
+            $existUser = User::where('email', $googleUser->getEmail())->first();
+            $roleDefault = Roles::where('name', 'Clientes')->first();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+            if (!$existUser) {
+                $user = User::create([
+                    'name'      => $googleUser->getName(),
+                    'email'     => $googleUser->getEmail(),
+                    'password'  => bcrypt('1234567890'),
+                    'city_id'   => 58,
+                    'role_id'   => $roleDefault->id,
+                    'google_id' => $googleUser->getId()
+                ]);
+
+                Sessions::create([
+                    'user_id'          => $user->id,
+                    'ip_address'       => $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'],
+                    'operative_system' => request()->header('User-Agent'),
+                    'start_date'       => now()->format('Y-m-d'),
+                    'end_date'         => null
+                ]);
+
+            } else {
+                $user = $existUser;
+            }
+
+            Auth::login($user);
+            return redirect()->intended('home');
+
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return redirect('/login')->withErrors(['error' => 'Hubo algún error intentando loguearse con google, si tiene credenciales, intentelo con el login normal']);
+        }
     }
 }

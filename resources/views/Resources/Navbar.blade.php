@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
     <div class="container">
         <!-- Logo del bar -->
-        <a class="navbar-brand d-flex align-items-center" href="#">
+        <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
             <img src="{{ asset('images/beer.jpeg') }}" alt="{{ config('app.name') }}" width="30" height="30" class="me-2">
             <strong>{{ config('app.name') }} Bar</strong>
         </a>
@@ -33,24 +33,101 @@
                     </a>
 
                     <ul class="dropdown-menu" aria-labelledby="configDropdown">
-                        <li><a class="dropdown-item" href="{{ route('list', ['type' => 9]) }}">Pagos</a></li>
-                        <li><a class="dropdown-item" href="{{ route('list', ['type' => 14]) }}">Categorias</a></li>
-                        <li><a class="dropdown-item" href="{{ route('list', ['type' => 2]) }}">Ciudades</a></li>
-                        <li><a class="dropdown-item" href="{{ route('list', ['type' => 8]) }}">Cobros</a></li>
-                        <li><a class="dropdown-item" href="{{ route('list', ['type' => 6]) }}">Inventario</a></li>
-                        <li><a class="dropdown-item" href="{{ route('list', ['type' => 5]) }}">Mesas</a></li>
-                        <li><a class="dropdown-item" href="{{ route('list', ['type' => 12]) }}">Música</a></li>
-                        <li><a class="dropdown-item" href="{{ route('list', ['type' => 7]) }}">Cajas</a></li>
-                        <li><a class="dropdown-item" href="{{ route('list', ['type' => 1]) }}">Paises</a></li>
-                        <li><a class="dropdown-item" href="{{ route('list', ['type' => 11]) }}">Preparaciones</a></li>
-                        <li><a class="dropdown-item" href="{{ route('list', ['type' => 13]) }}">Productos</a></li>
-                        <li><a class="dropdown-item" href="{{ route('list', ['type' => 10]) }}">Promociones</a></li>
-                        <li><a class="dropdown-item" href="{{ route('list', ['type' => 3]) }}">Roles</a></li>
-                        <li><a class="dropdown-item" href="{{ route('list', ['type' => 4]) }}">Usuarios</a></li>
+                         <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 7]) }}">
+                                <i class="bi bi-safe"></i> Cajas
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 14]) }}">
+                                <i class="bi bi-tags"></i> Categorias
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 2]) }}">
+                                <i class="bi bi-buildings"></i> Ciudades
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 8]) }}">
+                                <i class="bi bi-receipt"></i> Cobros
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 6]) }}">
+                                <i class="bi bi-boxes"></i> Inventario
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 5]) }}">
+                                <i class="bi bi-grid-3x3"></i> Mesas
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 12]) }}">
+                                <i class="bi bi-music-note-beamed"></i> Música
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 9]) }}">
+                                <i class="bi bi-credit-card"></i> Pagos
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 1]) }}">
+                                <i class="bi bi-globe"></i> Paises
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 11]) }}">
+                                <i class="bi bi-cup-hot"></i> Preparaciones
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 13]) }}">
+                                <i class="bi bi-bag"></i> Productos
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 10]) }}">
+                                <i class="bi bi-gift"></i> Promociones
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 3]) }}">
+                                <i class="bi bi-person-badge"></i> Roles
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 16]) }}">
+                                <i class="bi bi-truck"></i> Proveedores
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('list', ['type' => 15]) }}">
+                                <i class="bi bi-bank"></i> Tipos de Págo
+                            </a>
+                        </li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="profileMenu" role="button" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-box-arrow-right"></i> {{ Auth::user()->name }} {{ Auth::user()->last_name }}
+                    </a>
+
+                    <ul class="dropdown-menu" aria-labelledby="profileMenu">
+                        <li>
+                            <a href="{{ route('profile') }}" class="dropdown-item">
+                                <i class="bi bi-person-circle"></i> Perfil
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('logout') }}" class="dropdown-item">
+                                <i class="bi bi-door-open"></i> Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>

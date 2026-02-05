@@ -9,6 +9,6 @@ class MusicByTables extends Model
 {
     use HasFactory;
     protected $table = "music_by_tables";
-    protected $fillable = [ 'music_id', 'club_table_id' ];
+    protected $fillable = [ 'id', 'music_id', 'club_table_id' ];
     public $timestamps = true;
 }

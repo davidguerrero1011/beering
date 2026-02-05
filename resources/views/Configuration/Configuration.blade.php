@@ -46,7 +46,7 @@
 
         @case(7)
             @php
-                $opcion = 'Pagos';
+                $opcion = 'Cajas';
             @endphp
         @break
 
@@ -58,7 +58,7 @@
 
         @case(9)
             @php
-                $opcion = 'Cajas';
+                $opcion = 'Pagos';
             @endphp
         @break
 
@@ -89,6 +89,18 @@
         @case(14)
             @php
                 $opcion = 'Categorias';
+            @endphp
+        @break
+
+        @case(15)
+            @php
+                $opcion = 'Tipos De Pagos'
+            @endphp
+        @break
+
+        @case(16)
+            @php
+                $opcion = 'Proveedores'
             @endphp
         @break
 

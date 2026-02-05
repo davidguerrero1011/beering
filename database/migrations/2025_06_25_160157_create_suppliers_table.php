@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('email')->unique()->comment('Suppliers email');
             $table->string('cellphone')->nullable()->comment('Suppliers cellphone');
             $table->string('phone')->nullable()->comment('Suppliers phone');
-            $table->tinyInteger('status')->default(1)->comment('Sessions status');
+            $table->tinyInteger('status')->default(1)->nullable()->comment('Sessions status');
             $table->timestamps();
         });
     }

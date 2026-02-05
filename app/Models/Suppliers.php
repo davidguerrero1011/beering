@@ -26,4 +26,14 @@ class Suppliers extends Model
     {
         return $this->hasMany(Inventaries::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(Cities::class, 'city_id');
+    }
 }

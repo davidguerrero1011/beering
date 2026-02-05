@@ -10,4 +10,9 @@ class PaymentTypes extends Model
     use HasFactory;
     protected $fillable = [ 'type', 'status' ];
     public $timestamps = true;
+
+    public function accountsByPayment()
+    {
+        return $this->hasMany(AccountsByPayment::class);
+    }
 }

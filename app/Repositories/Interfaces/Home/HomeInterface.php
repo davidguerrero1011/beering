@@ -10,4 +10,8 @@ interface HomeInterface {
     public function getRoleByUser();
     public function getAccountInfo(int $id, Request $request);
     public function getTypeUser(int $id);
+    public function getProfile();
+    public function validatePassword(Array $request);
+    public function changePassword(Request $request);
+    public function getStatesTable(Request $request);
 }

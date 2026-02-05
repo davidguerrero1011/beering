@@ -50,6 +50,18 @@
             {{ config('app.name') }} - Editar Música
         @break
 
+        @case(13)
+            {{ config('app.name') }} - Editar Productos
+        @break
+        
+        @case(14)
+            {{ config('app.name') }} - Editar Categorias
+        @break
+        
+        @case(15)
+            {{ config('app.name') }} - Editar Tipo De Pago
+        @break
+
         @default
     @endswitch
 @endsection
@@ -119,12 +131,20 @@
                         <h5 class="mb-0">Editar Categoria</h5>
                     @break
 
+                    @case(15)
+                        <h5 class="mb-0">Editar Tipos De Pago</h5>
+                    @break
+
+                    @case(16)
+                        <h5 class="mb-0">Editar Proveedores</h5>
+                    @break
+
                     @default
                 @endswitch
             </div>
 
             <div class="card-body">
-                <x-edit-form-component :type="$type" :id="$id" :users="$users" :information="$information" :countries="$countries" />
+                <x-edit-form-component :type="$type" :id="$id" :cities="$cities" :countries="$countries" :roles="$roles" :products="$products" :suppliers="$suppliers" :users="$users" :information="$information" :categories="$categories" :tables="$tables" :paymentTypes="$paymentTypes" />
             </div>
         </div>
 
